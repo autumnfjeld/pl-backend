@@ -47,6 +47,11 @@ angular.module('myApp.controllers', [])
          }
       };
 
+      $scope.fblogin = function() {
+        console.log("WWAAH");
+        loginService.login();
+      }
+
       $scope.createAccount = function() {
          $scope.err = null;
          if( assertValidLoginAttempt() ) {
