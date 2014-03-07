@@ -48,8 +48,7 @@ angular.module('myApp.controllers', [])
       };
 
       $scope.fblogin = function() {
-        console.log("WWAAH");
-        loginService.login();
+        loginService.fblogin();
       }
 
       $scope.createAccount = function() {

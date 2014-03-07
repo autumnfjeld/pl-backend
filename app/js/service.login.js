@@ -1,12 +1,15 @@
 
 angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
 
-   .factory('loginService', ['$rootScope', '$firebaseSimpleLogin', 'firebaseRef', 'profileCreator', '$timeout',
-      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, $timeout) {
+   .factory('loginService', ['$rootScope', '$firebaseSimpleLogin', 'firebaseRef',
+    'profileCreator', 'validateFacebook', '$timeout',
+      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, validateFacebook, $timeout) {
          var auth = null;
          return {
             init: function() {
-               return auth = $firebaseSimpleLogin(firebaseRef());
+              auth = $firebaseSimpleLogin(firebaseRef());
+              console.log('init run. auth =')
+              return auth;
             },
 
             /**
@@ -33,14 +36,15 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
    
             fblogin : function(callback) {
               assertAuth();
-              console.log('auth', auth);
-                auth.$login('facebook')
-                  .then(function(user){
-                      console.log('Facebook validation success:', user);
-                      UserCreator.userExists(user);
-                    }, function(error){
-                      console.log('Facebook vaildation error:', error);
-                    });
+                console.log('fblogin service. auth', auth);
+                  auth.$login('facebook')
+                    .then(function(user){
+                        $rootScope.fbAuthToken = user.accessToken;
+                        console.log('Facebook validation success:', user);
+                        validateFacebook.userExists(user, validateFacebook.addUser) 
+                      }, function(error){
+                        console.log('Facebook vaildation error:', error);
+                      });
             },
 
             logout: function() {
@@ -74,6 +78,32 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
             if( auth === null ) { throw new Error('Must call loginService.init() before using its methods'); }
          }
       }])
+
+  .factory('validateFacebook', ['$firebase', 'firebaseRef', 
+    function($firebase, firebaseRef) {
+
+      return { 
+      
+        userExists : function(fbuser, callback) {
+          console.log('in userExists, fbuser id', fbuser.id);
+          var idsRef = firebaseRef('fireid_to_fbid/'+fbuser.id);
+          idsRef.once('value', function(snap){
+            console.log('snap.val', snap.val());
+            if (snap.val() === null){
+              console.log('user doesnot exist');
+              callback(fbuser);
+            }
+          });
+        },
+
+        addUser : function(fbuser){
+          var id = firebaseRef('users').push(fbuser).name();
+          console.log('added, id is', id);
+          firebaseRef('fireid_to_fbid/'+fbuser.id).set(id);  
+        }
+      };
+
+    }])
 
    .factory('profileCreator', ['firebaseRef', '$timeout', function(firebaseRef, $timeout) {
       return function(id, email, callback) {
