@@ -1,9 +1,9 @@
 
-angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
+angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'myApp.service.userdata'])
 
    .factory('loginService', ['$rootScope', '$firebaseSimpleLogin', 'firebaseRef',
-    'profileCreator', 'validateFacebook', '$timeout',
-      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, validateFacebook, $timeout) {
+    'profileCreator', 'userDataService', '$timeout',
+      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, userDataService, $timeout) {
          var auth = null;
          return {
             init: function() {
@@ -41,7 +41,7 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
                     .then(function(user){
                         $rootScope.fbAuthToken = user.accessToken;
                         console.log('Facebook validation success:', user);
-                        validateFacebook.userExists(user, validateFacebook.addUser) 
+                        userDataService.exists(user, userDataService.create(user)) 
                       }, function(error){
                         console.log('Facebook vaildation error:', error);
                       });
@@ -78,32 +78,6 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
             if( auth === null ) { throw new Error('Must call loginService.init() before using its methods'); }
          }
       }])
-
-  .factory('validateFacebook', ['$firebase', 'firebaseRef', 
-    function($firebase, firebaseRef) {
-
-      return { 
-      
-        userExists : function(fbuser, callback) {
-          console.log('in userExists, fbuser id', fbuser.id);
-          var idsRef = firebaseRef('fireid_to_fbid/'+fbuser.id);
-          idsRef.once('value', function(snap){
-            console.log('snap.val', snap.val());
-            if (snap.val() === null){
-              console.log('user doesnot exist');
-              callback(fbuser);
-            }
-          });
-        },
-
-        addUser : function(fbuser){
-          var id = firebaseRef('users').push(fbuser).name();
-          console.log('added, id is', id);
-          firebaseRef('fireid_to_fbid/'+fbuser.id).set(id);  
-        }
-      };
-
-    }])
 
    .factory('profileCreator', ['firebaseRef', '$timeout', function(firebaseRef, $timeout) {
       return function(id, email, callback) {
