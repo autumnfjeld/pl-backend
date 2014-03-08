@@ -3,8 +3,10 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-   .controller('HomeCtrl', ['$scope', 'syncData', function($scope, syncData) {
-      syncData('syncedValue').$bind($scope, 'syncedValue');
+   .controller('HomeCtrl', ['$scope', 'syncData',
+    function($scope, syncData) {
+      syncData('syncedValueToFirebase').$bind($scope, 'syncedValue');
+
    }])
 
   // .controller('ChatCtrl', ['$scope', 'syncData', function($scope, syncData) {
@@ -83,11 +85,27 @@ angular.module('myApp.controllers', [])
       }
    }])
 
-   .controller('AccountCtrl', ['$scope', 'loginService', 'syncData', '$location', function($scope, loginService, syncData, $location) {
+   .controller('AccountCtrl', ['$scope', 'loginService', 'syncData', '$location', 'userDataService',
+    function($scope, loginService, syncData, $location, userDataService) {
       syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user');
 
       $scope.logout = function() {
          loginService.logout();
+      };
+
+      $scope.getList = function(){
+        userDataService.getList(['-JHUNvVCQkH7w99_Et8W', '12345'])
+          .then(function(data){
+            console.log('got list', data);
+          });
+      };
+
+      $scope.getOne = function(){
+        // console.log(userDataService.get('-JHUNvVCQkH7w99_Et8W'));
+        userDataService.get('-JHUNvVCQkH7w99_Et8W')
+          .then(function(data){
+            console.log('got one user', data);
+          });
       };
 
       $scope.oldpass = null;
@@ -123,5 +141,7 @@ angular.module('myApp.controllers', [])
             }
          }
       }
+
+
 
    }]);

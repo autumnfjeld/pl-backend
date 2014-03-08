@@ -23,6 +23,9 @@ angular.module('myApp.service.firebase', ['firebase'])
        * @param {int} [limit]
        * @return a Firebase instance
        */
+      //autumnnote: object returned by $firebase is kept in sync with remote firebase data,
+      //but changes to the local object must be communicated to remote with $add, etc methods.
+      //3way data biding via $bind($scope, model)
       return function(path, limit) {
          var ref = firebaseRef(path);
          limit && (ref = ref.limit(limit));

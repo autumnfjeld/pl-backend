@@ -17,7 +17,7 @@ angular.module('waitForAuth', [])
       subs.push($rootScope.$on('$firebaseSimpleLogin:error', fn));
       function fn(err) {
          if( $rootScope.auth ) {
-            $rootScope.auth.error = err instanceof Error? err.toString() : null;
+            $rootScope.auth.error = err instanceof Error ? err.toString() : null;
          }
          for(var i=0; i < subs.length; i++) { subs[i](); }
          $timeout(function() {
@@ -25,8 +25,16 @@ angular.module('waitForAuth', [])
             def.resolve();
          });
       }
+      console.log('End of waitforauth def.promise', def.promise);
+      console.log('auth object', $rootScope.auth);
       return def.promise;
    })
+/**
+ * A service to return current user data
+ */
+   // .service('currentUserService', function(){
+   //    return $getCurrentUser();
+   // })
 
 /**
  * A directive that hides the element from view until waitForAuth resolves
