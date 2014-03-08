@@ -16,7 +16,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
           });
         },
 
-        create : function(fbuser){
+        createfb : function(fbuser){
           var userObj = {
             displayname     : fbuser.first_name,
             fbDump          : fbuser,
@@ -25,9 +25,9 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
             fbAuthToken     : fbuser.accessToken,
             paymentData     : {'todo' : 'stripe?'},
             trustPoints     : {},
-            merchants       : {},
-            transactions    : {}
-
+            merchantsSubs   : {},
+            transactions    : {},
+            dealsClicked    : {}
           };
 
           var id = firebaseRef('users').push(userObj).name();
@@ -46,37 +46,8 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
         },
 
         getList : function(array, callback){
-          console.log('incomingarray', array);
-          get = this.get;
-          return $q.all([
-              _.map(array, function(userid){
-                  return get(userid);
-                })
-            ]).then(function (results){
-              console.log('results', results);
-              var userList = [];
-              _.each(results, function (result){
-                  console.log('listing....', result.data)
-                  userList.push(result.data);
-              });
-              return userList;
-            });
-
-
-          ////USE promises
-          // var deferred = $q.defer();
-
-          // $timeout(function(){
-          //   defered.resolve(
-          //    _.map(array, function(userid){
-          //     firebaseRef('users/'+userid)
-          //       .once('value', function(snap){
-          //         console.log('check', userid, snap.val());
-          //         return snap.val();
-          //         //return function get
-          //       });
-          //   })
-          // );
+          // get = this.get;
+          return $q.all(_.map(array, this.get)); // note map takes third param of context
         },
 
         update : function(){

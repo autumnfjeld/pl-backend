@@ -54,7 +54,10 @@ angular.module('myApp.controllers', [])
       }
 
       $scope.createAccount = function() {
+        //refactor with promises.
+         //exceptions captured within promise
          $scope.err = null;
+
          if( assertValidLoginAttempt() ) {
             loginService.createAccount($scope.email, $scope.pass, function(err, user) {
                if( err ) {
