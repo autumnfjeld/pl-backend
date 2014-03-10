@@ -1,0 +1,19 @@
+<ul ng-repeat="(dealId, deal) in deals">
+  {{ dealId }}
+  <li>{{ deal.title }} | <a href="#/deals/{{ dealId }}">description</a> 
+    <button ng-click="deleteDeal(dealId)">delete</button> 
+  </li>
+</ul>
+
+<form ng-submit="submitDeal()">
+  <label>Title:</label>
+  <input type="text" ng-model="deal.title" /><br>
+  <label>Description:</label>
+  <input type="text" ng-model="deal.description" /><br>
+
+  <input type="submit" value="Create Deal" />
+</form>
+<br><br><br>
+Deals: {{ deals }}
+<br><br><br>
+Deal: {{ deal }}

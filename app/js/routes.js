@@ -21,6 +21,16 @@ angular.module('myApp.routes', ['ngRoute'])
          controller: 'AccountCtrl'
       });
 
+      $routeProvider.when('/deals', {
+         templateUrl: 'partials/deals.html',
+         controller: 'DealsCtrl'
+      });
+
+      $routeProvider.when('/deals/:dealId', {
+         templateUrl: 'partials/dealUpdate.html',
+         controller: 'DealUpdateCtrl'
+      });
+
       $routeProvider.when('/login', {
          templateUrl: 'partials/login.html',
          controller: 'LoginCtrl'

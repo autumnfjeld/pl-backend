@@ -155,6 +155,4 @@ angular.module('myApp.controllers', [])
          }
       }
 
-
-
-   }]);
+}]);
