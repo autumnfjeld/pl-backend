@@ -18,14 +18,15 @@ angular.module('myApp.controllers', [])
 
   //     // add new messages to the list
   //     $scope.addMessage = function() {
-  //        if( $scope.newMessage ) {
+  //        if( $scope.newMessage ) {So 
   //           $scope.messages.$add({text: $scope.newMessage});
   //           $scope.newMessage = null;
   //        }
   //     };
   //  }])
 
-   .controller('LoginCtrl', ['$scope', 'loginService', '$location', function($scope, loginService, $location) {
+   .controller('LoginCtrl', ['$scope', 'loginService', '$location', 
+      function($scope, loginService, $location) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;
@@ -54,8 +55,8 @@ angular.module('myApp.controllers', [])
       }
 
       $scope.createAccount = function() {
-        //refactor with promises.
-         //exceptions captured within promise
+        //this function calls angularfire's $createUser and a profileCreator that
+        //creates the user in database with email and name fields
          $scope.err = null;
 
          if( assertValidLoginAttempt() ) {
@@ -66,7 +67,8 @@ angular.module('myApp.controllers', [])
                else {
                   // must be logged in before I can write to my profile
                   $scope.login(function() {
-                     loginService.createProfile(user.uid, user.email);
+                     //loginService.createProfile(user.uid, user.email);
+                     loginService.createProfile(user);
                      $location.path('/account');
                   });
                }
@@ -90,9 +92,15 @@ angular.module('myApp.controllers', [])
 
    .controller('AccountCtrl', ['$scope', 'loginService', 'syncData', '$location', 'userDataService',
     function($scope, loginService, syncData, $location, userDataService) {
-      syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user');
 
+      //syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user');
+
+      //get firebase data to populate fields
+      
+      //$scope.user = $rootScope.auth;
+      
       $scope.logout = function() {
+        console.log()
          loginService.logout();
       };
 
@@ -111,6 +119,12 @@ angular.module('myApp.controllers', [])
           });
       };
 
+      $scope.updateStuff = function() {
+         $scope.reset();
+         // update user object
+         loginService.update(id, userObj);
+      };
+
       $scope.oldpass = null;
       $scope.newpass = null;
       $scope.confirm = null;
@@ -120,10 +134,6 @@ angular.module('myApp.controllers', [])
          $scope.msg = null;
       };
 
-      $scope.updatePassword = function() {
-         $scope.reset();
-         loginService.changePassword(buildPwdParms());
-      };
 
       function buildPwdParms() {
          return {

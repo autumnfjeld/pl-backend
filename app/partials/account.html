@@ -4,7 +4,9 @@
 <form>
     <fieldset>
         <legend>Profile</legend>
-
+        <label>
+            <span>Userid: {{user }}</span>
+        </label>
         <label>
             <span>Name:</span>
             <input type="text" name="name" ng-model="user.name"/>
@@ -34,7 +36,7 @@
             <input type="password" ng-keypress="reset()" ng-model="confirm"/>
         </label>
 
-        <button ng-click="updatePassword()">update password</button>
+        <button ng-click="updateStuff()">update stuff</button>
 
         <p class="error" ng-show="err">{{err}}</p>
         <p class="good" ng-show="msg">{{msg}}</p>
