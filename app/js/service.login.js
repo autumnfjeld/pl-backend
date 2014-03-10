@@ -81,16 +81,28 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
          }
       }])
 
-   .factory('profileCreator', ['firebaseRef', '$timeout', function(firebaseRef, $timeout) {
-      return function(id, email, callback) {
-         firebaseRef('users/'+id).set({email: email, name: firstPartOfEmail(email)}, function(err) {
-            //err && console.error(err);
-            if( callback ) {
-               $timeout(function() {
-                  callback(err);
-               })
-            }
-         });
+   .factory('profileCreator', ['firebaseRef', '$timeout', '$rootScope',
+    function(firebaseRef, $timeout, $rootScope) {
+      //return function(id, email, callback) {
+      return function(user, callback) {
+        console.log('111checking auth object', $rootScope.auth);
+        //TODO: consider refactor to keep a consistent user key
+        var userObj = {
+          displayname : firstPartOfEmail(user.email),
+          createDump  : user,
+        };
+        var id = firebaseRef('users').push(userObj).name();
+        console.log('email/pw user added. id is', id);
+        firebaseRef('fireid_to_authid/'+user.email).set(id);  
+
+         // firebaseRef('users/'+id).set({email: email, name: firstPartOfEmail(email)}, function(err) {
+         //    //err && console.error(err);
+         //    if( callback ) {
+         //       $timeout(function() {
+         //          callback(err);
+         //       })
+         //    }
+         // });
 
          function firstPartOfEmail(email) {
             return ucfirst(email.substr(0, email.indexOf('@'))||'');

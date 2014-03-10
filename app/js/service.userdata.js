@@ -19,7 +19,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
         createfb : function(fbuser){
           var userObj = {
             displayname     : fbuser.first_name,
-            fbDump          : fbuser,
+            createDump      : fbuser,
             homecity        : fbuser.hometown.name,
             locationHistory : {},       //https://www.firebase.com/docs/managing-lists.html
             fbAuthToken     : fbuser.accessToken,
@@ -32,7 +32,11 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
 
           var id = firebaseRef('users').push(userObj).name();
           console.log('user added. id is', id);
-          firebaseRef('fireid_to_fbid/'+fbuser.id).set(id);  
+          firebaseRef('fireid_to_authid/'+fbuser.id).set(id);  
+        },
+
+        create : function(pwuser){
+
         },
 
         get : function(userid, callback){
@@ -50,8 +54,16 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
           return $q.all(_.map(array, this.get)); // note map takes third param of context
         },
 
-        update : function(){
+        update : function(id, userObj){
+          //DENORMALIZE
+          //update implies client already has 'full' user object, overwrites whatever,
+          //then sends user object back, but what about id?
           //TODO: let user update phone and email
+          firebaseRef('users/'+ userid).set(userObj);
+        },
+
+        updateLoc : function(){
+          //will add to the  users/locationHistory
         },
 
         delete : function(){
