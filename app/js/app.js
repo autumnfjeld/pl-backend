@@ -2,7 +2,10 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('myApp',
-      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers', 'waitForAuth', 'routeSecurity'])
+      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers',
+      'waitForAuth', 'routeSecurity', 'myApp.service.dealdata', 'myApp.controller.deal'])
+
+//TO DO: Autumn, don't you have to add your myApp.service.userdata in the list of dependancies?
 
    .run(['loginService', '$rootScope', 'FBURL', 
       function(loginService, $rootScope, FBURL) {

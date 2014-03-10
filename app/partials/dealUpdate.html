@@ -1,0 +1,14 @@
+<a href="#/deals">Back to deals</a>
+<br>
+
+Deal: {{ deal }}
+
+<form ng-submit="updateDeal()">
+  <label>Title:</label>
+  <input type="text" ng-model="deal.title" value="{{ deal.title }}" /><br>
+  <label>Description:</label>
+  <input type="text" ng-model="deal.description" value="{{ deal.description }}" /><br>
+  <input type="submit" value="Save" />
+</form>
+ 
+
