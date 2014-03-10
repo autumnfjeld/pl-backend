@@ -1,9 +1,10 @@
 (function(angular) {
    angular.module('routeSecurity', [])
-      .run(['$injector', '$location', '$rootScope', 'loginRedirectPath', function($injector, $location, $rootScope, loginRedirectPath) {
-         if( $injector.has('$route') ) {
-            new RouteSecurityManager($location, $rootScope, $injector.get('$route'), loginRedirectPath);
-         }
+      .run(['$injector', '$location', '$rootScope', 'loginRedirectPath', 
+         function($injector, $location, $rootScope, loginRedirectPath) {
+            if( $injector.has('$route') ) {
+               new RouteSecurityManager($location, $rootScope, $injector.get('$route'), loginRedirectPath);
+            }
       }]);
 
    function RouteSecurityManager($location, $rootScope, $route, path) {

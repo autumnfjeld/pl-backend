@@ -1,9 +1,10 @@
 
-angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'myApp.service.userdata'])
+angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'myApp.service.userdata',
+   'myApp.services.helpers'])
 
    .factory('loginService', ['$rootScope', '$firebaseSimpleLogin', 'firebaseRef',
-    'profileCreator', 'userDataService', '$timeout',
-      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, userDataService, $timeout) {
+     'userDataService', '$timeout',
+      function($rootScope, $firebaseSimpleLogin, firebaseRef, userDataService, $timeout) {
          var auth = null;
          return {
             init: function() {
@@ -39,9 +40,9 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
                 console.log('fblogin service. auth', auth);
                   auth.$login('facebook')
                     .then(function(user){
-                        $rootScope.fbAuthToken = user.accessToken;
+                        //$rootScope.fbAuthToken = user.accessToken;
                         console.log('Facebook validation success:', user);
-                        userDataService.exists(user, userDataService.create(user)) 
+                        userDataService.exists(user) 
                       }, function(error){
                         console.log('Facebook vaildation error:', error);
                       });
@@ -67,52 +68,18 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
             // },
 
             createAccount: function(email, pass, callback) {
+              console.log('createAccount');
                assertAuth();
-               auth.$createUser(email, pass)
+               auth.$createUser(email, pass)  //returns a promise that is resolved when acnt successfully created
                 .then(function(user) { 
+                    console.log('$createUser arguments', arguments);
+                    userDataService.createByEmail(user);
                     callback && callback(null, user) }, callback);
-            },
+            }
 
-            createProfile: profileCreator
          };
 
          function assertAuth() {
             if( auth === null ) { throw new Error('Must call loginService.init() before using its methods'); }
          }
       }])
-
-   .factory('profileCreator', ['firebaseRef', '$timeout', '$rootScope',
-    function(firebaseRef, $timeout, $rootScope) {
-      //return function(id, email, callback) {
-      return function(user, callback) {
-        console.log('111checking auth object', $rootScope.auth);
-        //TODO: consider refactor to keep a consistent user key
-        var userObj = {
-          displayname : firstPartOfEmail(user.email),
-          createDump  : user,
-        };
-        var id = firebaseRef('users').push(userObj).name();
-        console.log('email/pw user added. id is', id);
-        firebaseRef('fireid_to_authid/'+user.email).set(id);  
-
-         // firebaseRef('users/'+id).set({email: email, name: firstPartOfEmail(email)}, function(err) {
-         //    //err && console.error(err);
-         //    if( callback ) {
-         //       $timeout(function() {
-         //          callback(err);
-         //       })
-         //    }
-         // });
-
-         function firstPartOfEmail(email) {
-            return ucfirst(email.substr(0, email.indexOf('@'))||'');
-         }
-
-         function ucfirst (str) {
-            // credits: http://kevin.vanzonneveld.net
-            str += '';
-            var f = str.charAt(0).toUpperCase();
-            return f + str.substr(1);
-         }
-      }
-   }]);

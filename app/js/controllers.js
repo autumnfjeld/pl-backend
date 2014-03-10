@@ -25,8 +25,8 @@ angular.module('myApp.controllers', [])
   //     };
   //  }])
 
-   .controller('LoginCtrl', ['$scope', 'loginService', '$location', 
-      function($scope, loginService, $location) {
+   .controller('LoginCtrl', ['$scope', 'loginService', '$location', 'userDataService',
+      function($scope, loginService, $location, userDataService) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;
@@ -55,20 +55,16 @@ angular.module('myApp.controllers', [])
       }
 
       $scope.createAccount = function() {
-        //this function calls angularfire's $createUser and a profileCreator that
-        //creates the user in database with email and name fields
          $scope.err = null;
 
          if( assertValidLoginAttempt() ) {
             loginService.createAccount($scope.email, $scope.pass, function(err, user) {
                if( err ) {
-                  $scope.err = err? err + '' : null;
+                  $scope.err = err ? err + '' : null;
                }
                else {
-                  // must be logged in before I can write to my profile
+                  // must be logged in before profile is written to
                   $scope.login(function() {
-                     //loginService.createProfile(user.uid, user.email);
-                     loginService.createProfile(user);
                      $location.path('/account');
                   });
                }

@@ -1,22 +1,33 @@
 
-angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
-  .factory('userDataService', ['$firebase', 'firebaseRef', '$q',
-    function($firebase, firebaseRef, $q) {
+angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 'myApp.services.helpers'])
+  .factory('userDataService', ['$firebase', 'firebaseRef', '$q', '$rootScope', 'helpers',
+    function($firebase, firebaseRef, $q, $rootScope, helpers) {
       var usersRef = firebaseRef('users');
       var users = $firebase(usersRef);
-      console.log('checking userDataService users:',users);
 
       return { 
-        exists  : function(fbuser, callback) {
-          firebaseRef('fireid_to_fbid/'+fbuser.id)
+        exists  : function(user, callback) {
+          var self = this;
+          var d = $q.defer();
+
+          firebaseRef('fireid_to_authid/' + user.id)
             .once('value', function(snap){
-              if (snap.val() === null){
-                callback(fbuser);
-            }
+              d.resolve(snap.val());
           });
+         
+          d.promise
+            .then(function(id){
+              if(!id) {
+                console.log('did not find id', id);
+                self.createByFacebook(user);
+              }
+              console.log('found id', id);
+            });
+
+          //return d.promise  
         },
 
-        createfb : function(fbuser){
+        createByFacebook : function(fbuser){
           var userObj = {
             displayname     : fbuser.first_name,
             createDump      : fbuser,
@@ -32,11 +43,29 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase'])
 
           var id = firebaseRef('users').push(userObj).name();
           console.log('user added. id is', id);
-          firebaseRef('fireid_to_authid/'+fbuser.id).set(id);  
+          firebaseRef('fireid_to_authid/'+ fbuser.id).set(id);  
         },
 
-        create : function(pwuser){
+        createByEmail : function(user){
+          console.log('createByEmail: checking auth object', $rootScope.auth, 'and incomiing user', user);
+          var userObj = {
+            displayname : firstPartOfEmail(user.email),
+            createDump  : user
+          };
+          var id = firebaseRef('users').push(userObj).name();
+          console.log('email/pw user added. id is', id, 'user.email', user.email);
+          firebaseRef('fireid_to_authid/'+ helpers.emailStrip(user.email)).set(id);  
 
+           function firstPartOfEmail(email) {
+              return ucfirst(email.substr(0, email.indexOf('@'))||'');
+           }
+
+           function ucfirst (str) {
+              // credits: http://kevin.vanzonneveld.net
+              str += '';
+              var f = str.charAt(0).toUpperCase();
+              return f + str.substr(1);
+           }
         },
 
         get : function(userid, callback){
