@@ -9,7 +9,7 @@ angular.module('myApp.controller.deal', [])
     '$location', 'userDataService', 'dealDataService',
     function($scope, loginService, syncData, $location, userDataService, dealDataService) {
 
-      dealDataService.getDeals()
+      dealDataService.getAll()
       .then(function(data) {
         $scope.deals = data;
       });
@@ -19,40 +19,40 @@ angular.module('myApp.controller.deal', [])
         description: ''
       };
 
-      $scope.submitDeal = function() {
-        dealDataService.createDeal($scope.deal)
+      // $scope.submitDeal = function() {
+      //   dealDataService.create($scope.deal)
+      //   .then(function() {
+      //     console.log('Success create deal');
+
+      //     //Reset the scope deal object
+      //     $scope.deal = {
+      //       title: '',
+      //       description: ''
+      //     };
+
+      //     //Refetch the data
+      //     dealDataService.getAll()
+      //     .then(function(data) {
+      //       $scope.deals = data;
+      //     });
+
+      //   }, function() {
+      //     console.log('Error create deal');
+      //   });
+
+      // };
+
+      $scope.deleteDeal = function(dealId, merchantId) {
+        dealDataService.delete(dealId, merchantId)
         .then(function() {
-          console.log('Success create');
-
-          //Reset the scope deal object
-          $scope.deal = {
-            title: '',
-            description: ''
-          };
-
+          console.log('Success delete deal');
           //Refetch the data
-          dealDataService.getDeals()
-          .then(function(data) {
-            $scope.deals = data;
-          });
-
-        }, function() {
-          console.log('Error create');
-        });
-
-      };
-
-      $scope.deleteDeal = function(dealId) {
-        dealDataService.deleteDeal(dealId)
-        .then(function() {
-          console.log('Success delete');
-          //Refetch the data
-          dealDataService.getDeals()
+          dealDataService.getAll()
           .then(function(data) {
             $scope.deals = data;
           });
         }), function() {
-          console.log('Error delete');
+          console.log('Error delete deal');
         };
       };
 
@@ -62,31 +62,23 @@ angular.module('myApp.controller.deal', [])
     '$location', 'userDataService', 'dealDataService', '$routeParams',
     function($scope, loginService, syncData, $location, userDataService, dealDataService, $routeParams) {
 
-      dealDataService.findDeal($routeParams.dealId)
+      dealDataService.getById($routeParams.dealId)
       .then(function(data) {
-        console.log('Success find deal');
-        console.log('data', data);
-        console.log('$routeParams.dealId', $routeParams.dealId);
+        console.log('Success get deal by id');
         $scope.deal = data;
         $scope.dealId = $routeParams.dealId;
       }, function() {
-        console.log('Error find deal');
+        console.log('Error get deal by id');
       });
 
       $scope.updateDeal = function() {
-        dealDataService.updateDeal($scope.dealId, $scope.deal)
+        dealDataService.update($scope.dealId, $scope.deal)
         .then(function() {
-          console.log('Success update');
+          console.log('Success update deal');
           $location.path('/deals');
         }), function() {
-          console.log('Error update');
+          console.log('Error update deal');
         };
       };
-
-      $scope.cancelDeal = function() {
-        console.log('called');
-        $location.path('/deals');
-      };
-
 
    }]);

@@ -1,19 +1,22 @@
+<h3>List of deals</h3>
 <ul ng-repeat="(dealId, deal) in deals">
-  {{ dealId }}
   <li>{{ deal.title }} | <a href="#/deals/{{ dealId }}">description</a> 
-    <button ng-click="deleteDeal(dealId)">delete</button> 
+    <button ng-click="deleteDeal(dealId, deal.merchantId)">delete</button> 
   </li>
 </ul>
+<hr>
 
+<!-- <h3>Create a new deal</h3>
 <form ng-submit="submitDeal()">
-  <label>Title:</label>
+  Title:
   <input type="text" ng-model="deal.title" /><br>
-  <label>Description:</label>
+  Description:
   <input type="text" ng-model="deal.description" /><br>
 
   <input type="submit" value="Create Deal" />
 </form>
 <br><br><br>
+ -->
 Deals: {{ deals }}
 <br><br><br>
 Deal: {{ deal }}

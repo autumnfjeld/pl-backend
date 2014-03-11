@@ -15,12 +15,14 @@ angular.module('myApp.routes', ['ngRoute'])
       //    controller: 'ChatCtrl'
       // });
 
+      //ACCOUNTS
       $routeProvider.when('/account', {
          authRequired: true, // must authenticate before viewing this page
          templateUrl: 'partials/account.html',
          controller: 'AccountCtrl'
       });
 
+      //DEALS
       $routeProvider.when('/deals', {
          templateUrl: 'partials/deals.html',
          controller: 'DealsCtrl'
@@ -31,6 +33,18 @@ angular.module('myApp.routes', ['ngRoute'])
          controller: 'DealUpdateCtrl'
       });
 
+      //MERCHANTS
+      $routeProvider.when('/merchants', {
+         templateUrl: 'partials/merchants.html',
+         controller: 'MerchantsCtrl'
+      });
+
+      $routeProvider.when('/merchants/:merchantId', {
+         templateUrl: 'partials/merchantUpdate.html',
+         controller: 'MerchantUpdateCtrl'
+      });
+
+      //LOGIN
       $routeProvider.when('/login', {
          templateUrl: 'partials/login.html',
          controller: 'LoginCtrl'
