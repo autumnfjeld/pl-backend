@@ -20,8 +20,9 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
               if(!id) {
                 console.log('did not find id', id);
                 self.createByFacebook(user);
+              }else{
+                console.log('found id', id);
               }
-              console.log('found id', id);
             });
 
           //return d.promise  
@@ -42,19 +43,21 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
           };
 
           var id = firebaseRef('users').push(userObj).name();
+          
           console.log('user added. id is', id);
-          firebaseRef('fireid_to_authid/'+ fbuser.id).set(id);  
+          firebaseRef('authid_to_userkey/'+ fbuser.id).set(id);  
         },
 
         createByEmail : function(user){
           console.log('createByEmail: checking auth object', $rootScope.auth, 'and incomiing user', user);
           var userObj = {
             displayname : firstPartOfEmail(user.email),
+            firebaseAuth: user.firebaseAuthToken,
             createDump  : user
           };
           var id = firebaseRef('users').push(userObj).name();
           console.log('email/pw user added. id is', id, 'user.email', user.email);
-          firebaseRef('fireid_to_authid/'+ helpers.emailStrip(user.email)).set(id);  
+          firebaseRef('authid_to_userkey/'+ helpers.emailStrip(user.email)).set(id);  
 
            function firstPartOfEmail(email) {
               return ucfirst(email.substr(0, email.indexOf('@'))||'');
@@ -68,7 +71,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
            }
         },
 
-        get : function(userid, callback){
+        get : function(userid){
           var d = $q.defer();
 
           firebaseRef('users/'+userid)
@@ -78,7 +81,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
           return d.promise;
         },
 
-        getList : function(array, callback){
+        getAll : function(array){
           // get = this.get;
           return $q.all(_.map(array, this.get)); // note map takes third param of context
         },

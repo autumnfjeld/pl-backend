@@ -25,15 +25,24 @@ angular.module('waitForAuth', [])
             def.resolve();
          });
       }
-      console.log('End of waitforauth def.promise', def.promise);
-      console.log('auth object', $rootScope.auth);
+      console.log('def.promise', def.promise);
       return def.promise;
    })
 /**
- * A service to return current user data
+ * A service to return current user id
  */
-   // .service('currentUserService', function(){
-   //    return $getCurrentUser();
+   // .service('currentUserKey', function(waitForAuth, $rootScope, $q){
+      
+   //    waitForAuth.then(function(){
+   //      console.log('waiting for auth');
+   //      var d = $q.defer();
+   //      var authid = $rootScope.auth.email ? helpers.emailStrip($rootScope.auth.email) : $rootScope.auth.id;
+   //      firebaseRef('authid_to_userkey/'+ authid)
+   //        .once('value', function(snap){
+   //           d.resolve(snap.val());
+   //        })
+   //    })
+   //    return d.promise;
    // })
 
 /**

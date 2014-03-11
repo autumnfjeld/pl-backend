@@ -4,7 +4,7 @@
 angular.module('myApp',
       ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers',
       'waitForAuth', 'routeSecurity', 'myApp.controller.deal', 'myApp.service.dealdata',
-      'myApp.controller.merchant', 'myApp.service.merchantdata'])
+      'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers', 'myApp.controller.transactions'])
 
 
    .run(['loginService', '$rootScope', 'FBURL', 
@@ -13,4 +13,5 @@ angular.module('myApp',
       // with facebook login this returns an auth object of facebook data
       $rootScope.auth = loginService.init('/login');
       $rootScope.FBURL = FBURL;
+      //$rootScope.userId = currentUserKey;
    }]);

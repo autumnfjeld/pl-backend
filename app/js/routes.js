@@ -50,5 +50,11 @@ angular.module('myApp.routes', ['ngRoute'])
          controller: 'LoginCtrl'
       });
 
+      $routeProvider.when('/transactions', {
+         authRequired: true, // must authenticate before viewing this page
+         templateUrl: 'partials/transactions.html',
+         controller: 'TransactionCtrl'
+      });
+
       $routeProvider.otherwise({redirectTo: '/home'});
    }]);

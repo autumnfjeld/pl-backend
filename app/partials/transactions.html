@@ -1,0 +1,22 @@
+<h2> User id </h2>
+<br>
+<!-- <ul ng-repeat="(transactionId, transaction) in transactions">
+  {{ transactionId }}
+  <li>{{ transaction.title }} | <a href="#/deals/{{ dealId }}">description</a> 
+  <li>
+    {{ transaction.title}}
+  </li>
+</ul> -->
+
+<form ng-submit="initTransaction()">
+  <label>Cost:</label>
+  <input type="text" ng-model="transaction.amount" />$<br>
+  <label>Quantity:</label>
+  <input type="text" ng-model="transaction.quantity" /><br>
+  <input type="submit" value="Create transaction" />
+</form>
+
+<br><br><br>
+transactions: {{ transactions }}
+<br><br><br>
+transaction: {{ transaction }}

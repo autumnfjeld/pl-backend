@@ -41,7 +41,8 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
                   auth.$login('facebook')
                     .then(function(user){
                         //$rootScope.fbAuthToken = user.accessToken;
-                        console.log('Facebook validation success:', user);
+                        console.log('fblogin service. AFTER auth.$login', auth);
+                        console.log('Facebook validation success. user object:', user);
                         userDataService.exists(user) 
                       }, function(error){
                         console.log('Facebook vaildation error:', error);
