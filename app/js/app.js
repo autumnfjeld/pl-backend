@@ -6,6 +6,7 @@ angular.module('myApp',
       'waitForAuth', 'routeSecurity', 'myApp.controller.deal', 'myApp.service.dealdata',
       'myApp.controller.merchant', 'myApp.service.merchantdata'])
 
+
    .run(['loginService', '$rootScope', 'FBURL', 
       function(loginService, $rootScope, FBURL) {
       // establish authentication
