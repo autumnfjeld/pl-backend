@@ -82,19 +82,25 @@ angular.module('myApp.controller.merchant', [])
         $scope.deal = {
           title: '',
           description: '',
-          merchantId: $scope.merchantId
+          merchantId: $scope.merchantId,
+          file: ''
         };
 
         //LIST OF MERCHANT DEALS
         dealDataService.getByMerchantId($scope.merchantId)
         .then(function(data) {
-          console.log('data in controller', data);
           $scope.deals = data;
+
         });
 
       }, function() {
         console.log('Error get merchant by id');
       });
+
+      $scope.fileNameChanged = function(element)
+      {
+        $scope.deal.file = element.files[0];
+      }
 
       $scope.updateMerchant = function() {
         merchantDataService.update($scope.merchantId, $scope.merchant)
@@ -116,7 +122,8 @@ angular.module('myApp.controller.merchant', [])
           $scope.deal = {
             title: '',
             description: '',
-            merchantId: $scope.merchantId
+            merchantId: $scope.merchantId,
+            file: ''
           };
 
           //Refetch the data
