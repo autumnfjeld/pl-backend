@@ -1,0 +1,30 @@
+<h3>List of merchants</h3>
+<ul ng-repeat="(merchantId, merchant) in merchants">
+  <li>{{ merchant.businessName }} | <a href="#/merchants/{{ merchantId }}">description</a> 
+    <button ng-click="deleteMerchant(merchantId)">delete</button> 
+  </li>
+</ul>
+<hr>
+<h3>Create a new merchant</h3>
+<form ng-submit="submitMerchant()">
+  Business Name:
+  <input type="text" ng-model="merchant.businessName" /><br>
+  Address 1:
+  <input type="text" ng-model="merchant.address1" /><br>
+  Address 2:
+  <input type="text" ng-model="merchant.address2" /><br>
+  Phone:
+  <input type="text" ng-model="merchant.phone" /><br>
+  City:
+  <input type="text" ng-model="merchant.city" /><br>
+  State:
+  <input type="text" ng-model="merchant.state" /><br>
+  Zip:
+  <input type="text" ng-model="merchant.zip" /><br>
+
+  <input type="submit" value="Create Merchant" />
+</form>
+<br><br><br>
+merchants: {{ merchants }}
+<br><br><br>
+merchant: {{ merchant }}
