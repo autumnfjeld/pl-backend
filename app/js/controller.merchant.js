@@ -89,7 +89,6 @@ angular.module('myApp.controller.merchant', [])
         dealDataService.getByMerchantId($scope.merchantId)
         .then(function(data) {
           $scope.deals = data;
-
         });
 
       }, function() {
