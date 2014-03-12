@@ -55,6 +55,7 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
       return d.promise;
     },
 
+
     create: function(deal) {
       var d = $q.defer();
 
