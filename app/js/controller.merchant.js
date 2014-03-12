@@ -68,9 +68,9 @@ angular.module('myApp.controller.merchant', [])
    }])
 
    .controller('MerchantUpdateCtrl', ['$scope', 'loginService', 'syncData',
-    '$location', 'userDataService', 'merchantDataService', '$routeParams', 'dealDataService',
+    '$location', 'userDataService', 'merchantDataService', '$routeParams', 'dealDataService', '$q',
     function($scope, loginService, syncData, $location, userDataService, merchantDataService,
-      $routeParams, dealDataService) {
+      $routeParams, dealDataService, $q) {
 
       //MERCHANT DETAIL
       merchantDataService.getById($routeParams.merchantId)
@@ -82,8 +82,7 @@ angular.module('myApp.controller.merchant', [])
         $scope.deal = {
           title: '',
           description: '',
-          merchantId: $scope.merchantId,
-          file: ''
+          merchantId: $scope.merchantId
         };
 
         //LIST OF MERCHANT DEALS
@@ -97,11 +96,6 @@ angular.module('myApp.controller.merchant', [])
         console.log('Error get merchant by id');
       });
 
-      $scope.fileNameChanged = function(element)
-      {
-        $scope.deal.file = element.files[0];
-      }
-
       $scope.updateMerchant = function() {
         merchantDataService.update($scope.merchantId, $scope.merchant)
         .then(function() {
@@ -112,29 +106,44 @@ angular.module('myApp.controller.merchant', [])
         };
       };
 
+      $scope.fileNameChanged = function(element)
+      {
+        $scope.file = element.files[0];
+      }
 
       $scope.submitMerchantDeal = function() {
-        dealDataService.create($scope.deal)
-        .then(function() {
-          console.log('Success create merchant deal');
+        //Transform the file to a base64 encoding
+        var reader = new FileReader();
+        reader.onload = (function(theFile) {
+          return function(e) {
+            $scope.deal.image = e.target.result;
 
-          //Reset the scope deal object
-          $scope.deal = {
-            title: '',
-            description: '',
-            merchantId: $scope.merchantId,
-            file: ''
+            //Create the deal object in the db
+            dealDataService.create($scope.deal)
+            .then(function() {
+              console.log('Success create merchant deal');
+
+              //Reset the scope deal object
+              $scope.deal = {
+                title: '',
+                description: '',
+                merchantId: $scope.merchantId
+              };
+
+              //Refetch the data
+              dealDataService.getByMerchantId($scope.merchantId)
+              .then(function(data) {
+                $scope.deals = data;
+              });
+
+            }, function() {
+              console.log('Error create merchant deal');
+            });
+
           };
+        })($scope.file);
+        reader.readAsDataURL($scope.file);
 
-          //Refetch the data
-          dealDataService.getByMerchantId($scope.merchantId)
-          .then(function(data) {
-            $scope.deals = data;
-          });
-
-        }, function() {
-          console.log('Error create merchant deal');
-        });
       };
 
       $scope.deleteMerchantDeal = function(dealId, merchantId) {
