@@ -9,44 +9,34 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
          return {
             init: function() {
               auth = $firebaseSimpleLogin(firebaseRef());  //create instance of FirebaseSimpleLogin object
+              console.log('auth', auth);
               return auth;
             },
 
-            /**
-             * @param {string} email
-             * @param {string} pass
-             * @param {Function} [callback]
-             * @returns {*}
-             */
-            login: function(email, pass, callback) {
+            login: function(email, pass) {
               console.log('in login');
                assertAuth();
                auth.$login('password', {
                   email: email,
                   password: pass,
-                  rememberMe: true
-               }).then(function(user) {
-                     if( callback ) {
-                        //todo-bug https://github.com/firebase/angularFire/issues/199
-                        $timeout(function() {
-                           callback(null, user);
-                        });
-                     }
-                  }, callback);
+                  rememberMe: true })
+               .then(function(user) {
+                  //$rootScope.userId = auth.user.provider + ":" + auth.user.id;
+                  }, function(err){
+                    console.log('Login validation error:', err);
+                });
             },
    
-            fblogin : function(callback) {
+            fblogin : function() {
               assertAuth();
-                console.log('fblogin service. auth', auth);
                   auth.$login('facebook')
                     .then(function(user){
-                        //$rootScope.fbAuthToken = user.accessToken;
-                        console.log('fblogin service. AFTER auth.$login', auth);
-                        console.log('Facebook validation success. user object:', user);
-                        userDataService.exists(user) 
-                      }, function(error){
-                        console.log('Facebook vaildation error:', error);
-                      });
+                      console.log('fblogin service. AFTER auth.$login', auth);
+                      //$rootScope.userId = auth.user.provider + ":" + auth.user.id;
+                      userDataService.exists(user); 
+                      }, function(err){
+                        console.log('Facebook vaildation error:', err);
+                    });
             },
 
             logout: function() {

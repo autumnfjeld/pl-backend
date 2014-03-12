@@ -86,14 +86,15 @@ angular.module('myApp.controllers', [])
       }
    }])
 
-   .controller('AccountCtrl', ['$scope', 'loginService', 'syncData', '$location', 'userDataService',
-    function($scope, loginService, syncData, $location, userDataService) {
+   .controller('AccountCtrl', ['$scope', '$rootScope', 'loginService', 'syncData', 
+    '$location', 'userDataService','helpers',
+    function($scope, $rootScope, loginService, syncData, $location, userDataService, helpers) {
 
       //syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user');
 
       //get firebase data to populate fields
-      
-      //$scope.user = $rootScope.auth;
+      $scope.user = $rootScope.auth.user;
+      $scope.userId = $scope.user.provider + ":" + $scope.user.id;
       
       $scope.logout = function() {
         console.log()
@@ -101,17 +102,24 @@ angular.module('myApp.controllers', [])
       };
 
       $scope.getList = function(){
-        userDataService.getList(['-JHUNvVCQkH7w99_Et8W', '12345'])
+        userDataService.getList(['facebook:1049492124', "password:41"])
           .then(function(data){
             console.log('got list', data);
           });
       };
 
       $scope.getOne = function(){
-        // console.log(userDataService.get('-JHUNvVCQkH7w99_Et8W'));
-        userDataService.get('-JHUNvVCQkH7w99_Et8W')
+        console.log('$scope.currid', $scope.userId);
+        userDataService.getById($scope.userId)
           .then(function(data){
             console.log('got one user', data);
+          });
+      };
+
+      $scope.getAll = function(){
+        userDataService.getAll(['facebook:1049492124', "password:41"])
+          .then(function(data){
+            console.log('got all users', data);
           });
       };
 

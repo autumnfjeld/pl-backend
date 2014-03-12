@@ -10,7 +10,6 @@ angular.module('waitForAuth', [])
  * is initialized (i.e. it returns login, logout, or error)
  */
    .service('waitForAuth', function($rootScope, $q, $timeout) {
-      console.log('waitForAuth called');
       var def = $q.defer(), subs = [];
       subs.push($rootScope.$on('$firebaseSimpleLogin:login', fn));
       subs.push($rootScope.$on('$firebaseSimpleLogin:logout', fn));
@@ -25,7 +24,6 @@ angular.module('waitForAuth', [])
             def.resolve();
          });
       }
-      console.log('def.promise', def.promise);
       return def.promise;
    })
 /**
