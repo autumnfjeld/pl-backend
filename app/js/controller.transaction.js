@@ -4,7 +4,7 @@ angular.module('myApp.controller.transactions', ['myApp.service.transactiondata'
    .controller('TransactionCtrl', ['$scope', '$rootScope', 'transactionService',
     function($scope, $rootScope, transactionService) {
 
-      $scope.userId = $rootScope.auth.user.provider + ":" + $rootScope.auth.user.id;
+      $scope.userId = $rootScope.auth.user.uid;
 
       transactionService.getByUserId($scope.userId).then(function(data){
         $scope.currUserTransactions = data;

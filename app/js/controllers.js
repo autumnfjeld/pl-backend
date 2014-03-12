@@ -103,7 +103,7 @@ angular.module('myApp.controllers', [])
 
       //get firebase data to populate fields
       $scope.user = $rootScope.auth.user;
-      $scope.userId = $scope.user.provider + ":" + $scope.user.id;
+      $scope.userId = $rootScope.auth.user.uid;
       
       $scope.logout = function() {
         console.log()
