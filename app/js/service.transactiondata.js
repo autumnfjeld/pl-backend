@@ -83,8 +83,8 @@ angular.module('myApp.service.transactiondata', ['firebase', 'myApp.service.fire
         getByMerchantId : function(merchId){
          var self = this;
           var d1 = $q.defer();
-          //first get array of a user's transactionIds
-          root.child('merchants/'+ userId + '/transactions/')
+          //first get array of a merchant's transactionIds
+          root.child('merchants/'+ merchId + '/transactions/')
             .once('value', function(snap){
               d1.resolve( snap.val() );
             }, function(data){

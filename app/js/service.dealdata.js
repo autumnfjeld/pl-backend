@@ -2,6 +2,7 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
   .factory('dealDataService', ['$firebase', '$q', 'firebaseRef',
     function($firebase, $q, firebaseRef) {
 
+  var root = firebaseRef();
   var dealsRef = firebaseRef('deals');
 
   var Deal = {
@@ -19,47 +20,49 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
     getById: function(dealId) {
       var d = $q.defer();
       firebaseRef('deals/' + dealId).once('value', function(snap) {
-        console.log('getById: snap.val()', snap.val());
-        d.resolve(snap.val());
+        var obj = {};
+        obj[dealId] = snap.val();
+        console.log('getById: ', obj);
+        d.resolve( obj);
       }, function(data) {
         d.reject(data);
       });
       return d.promise;
     },
 
-    getByMerchantId: function(merchantId) {
+    getByMerchantId : function(merchantId){
+     var self = this;
+      var d1 = $q.defer();
+      //first get array of a merchant's dealsIds
+      root.child('merchants/'+ merchantId + '/deals/')
+        .once('value', function(snap){
+          d1.resolve( snap.val() );
+        }, function(data){
+          d1.reject(data);
+        });
 
-      var d = $q.defer();
-
-      var root = firebaseRef();
-      var merchantDealsRef = root.child('merchants/' + merchantId + '/deals');
-      var self = this;
- 
-      merchantDealsRef.once('value', function(snap) {
-        var listOfDeals = snap.val();
-        console.log('listOfDeals', listOfDeals);
-        $q.all(_.map(listOfDeals, function(value, key) {
+      var d2 = $q.defer();
+       
+      d1.promise.then(function(list){
+        $q.all(_.map(list, function(val,key){
           return self.getById(key);
         }, self))
-        .then(function(data) { //Array of deal objects
-          var i = 0;
-          for (var prop in listOfDeals) {
-            listOfDeals[prop] = data[i];
-            i++;
-          }
-          d.resolve(listOfDeals);
+        .then(function(data){
+          //convert array of items into object of objects
+          var obj = {};
+          _.each(data, function(item){
+            _.extend(obj, item)
+          })
+          d2.resolve(obj);
         });
-      }, function(data) {
-        d.reject(data);
       });
-      return d.promise;
-    },
 
+      return d2.promise;
+    },
 
     create: function(deal) {
       var d = $q.defer();
 
-      var root = firebaseRef();
       var id = root.child('/deals').push();
       //Creating the deal in the Firebase deals object
       id.set(deal, function(err) {
@@ -85,7 +88,6 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
 
     delete: function(dealId, merchantId) {
       var d = $q.defer();
-      var root = firebaseRef();
       //Deleting the deal in the deals object
       firebaseRef('deals/' + dealId).remove(function(err) {
         if(!err) {

@@ -65,14 +65,14 @@ angular.module('myApp.controller.deal', [])
       dealDataService.getById($routeParams.dealId)
       .then(function(data) {
         console.log('Success get deal by id');
-        $scope.deal = data;
         $scope.dealId = $routeParams.dealId;
+        $scope.deal = data[$routeParams.dealId];
       }, function() {
         console.log('Error get deal by id');
       });
 
-      $scope.updateDeal = function() {
-        dealDataService.update($scope.dealId, $scope.deal)
+      $scope.updateDeal = function(dealId, deal) {
+        dealDataService.update(dealId, deal)
         .then(function() {
           console.log('Success update deal');
           $location.path('/deals');

@@ -19,7 +19,10 @@ angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebas
     getById: function(merchantId) {
       var d = $q.defer();
       firebaseRef('merchants/' + merchantId).once('value', function(snap) {
-        d.resolve(snap.val());
+        var obj = {};
+        obj[merchantId] = snap.val();
+        console.log('getById: ', obj);
+        d.resolve( obj);
       }, function(data) {
         d.reject(data);
       });
