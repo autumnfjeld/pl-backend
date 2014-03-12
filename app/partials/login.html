@@ -5,6 +5,14 @@
 <button ng-click="fblogin()"> Log in with Facebook </button>
 <br>
 <form>
+        <label ng-cloak ng-show="createMode">
+        <span>First Name</span>
+        <input type="text" ng-model="user.firstName" />
+    </label>
+        <label ng-cloak ng-show="createMode">
+        <span>Last Name</span>
+        <input type="text" ng-model="user.lastName" />
+    </label>
     <label>
         <span>email</span>
         <input type="text" ng-model="email" />
@@ -17,6 +25,7 @@
         <span>confirm pass</span>
         <input type="password" ng-model="confirm" />
     </label>
+
     <button ng-click="login()" ng-hide="createMode">Log In</button>
     <button ng-click="createMode = true" ng-hide="createMode">Register</button>
     <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>

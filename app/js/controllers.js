@@ -54,11 +54,20 @@ angular.module('myApp.controllers', [])
         loginService.fblogin();
       }
 
+      //some dummy data
+      $scope.user = {
+          firstName : 'Jane',
+          lastName  : 'Smith'
+      };
+
       $scope.createAccount = function() {
          $scope.err = null;
+         $scope.user.email = $scope.email;
+         $scope.user.password = $scope.pass;
 
          if( assertValidLoginAttempt() ) {
-            loginService.createAccount($scope.email, $scope.pass, function(err, user) {
+          console.log('checking user obj', $scope.user);
+            loginService.createAccount($scope.user, function(err, user) {
                if( err ) {
                   $scope.err = err ? err + '' : null;
                }
