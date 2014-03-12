@@ -35,7 +35,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
             locationHistory : {},       //https://www.firebase.com/docs/managing-lists.html
           };
 
-          var d = $q.defer;
+          var d = $q.defer();
           firebaseRef('users').child('facebook:'+auth.id)
             .set(userObj, function(err){
               err ? d.reject() : d.resolve();
@@ -44,31 +44,41 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
  
         },
 
-        createByEmail : function(auth){
-          var userObj = {
-            displayname : firstPartOfEmail(auth.email),
-            email       : auth.email,
-            firebaseAuth: auth.firebaseAuthToken,
-            authDump    : auth
-          };
+        // createByEmail : function(auth){
+        //   var userObj = {
+        //     displayname : firstPartOfEmail(auth.email),
+        //     email       : auth.email,
+        //     firebaseAuth: auth.firebaseAuthToken,
+        //     authDump    : auth
+        //   };
 
-          var d = $q.defer;
-          firebaseRef('users').child('password:'+ auth.id)
-            .set(userObj, function(err){
+        //   var d = $q.defer();
+        //   firebaseRef('users').child('password:'+ auth.id)
+        //     .set(userObj, function(err){
+        //       err ? d.reject() : d.resolve();
+        //     });
+        //   return d.promise;
+
+        //   function firstPartOfEmail(email) {
+        //     return ucfirst(email.substr(0, email.indexOf('@'))||'');
+        //   }
+
+        //   function ucfirst (str) {
+        //       // credits: http://kevin.vanzonneveld.net
+        //       str += '';
+        //       var f = str.charAt(0).toUpperCase();
+        //       return f + str.substr(1);
+        //   }
+        // },
+        
+        createByEmail : function(obj){
+          console.log('createByEmail', obj);
+          var d = $q.defer();
+          firebaseRef('users').child('password:'+ obj.authDump.id)
+            .set(obj, function(err){
               err ? d.reject() : d.resolve();
             });
-          return d.promise;
-
-          function firstPartOfEmail(email) {
-            return ucfirst(email.substr(0, email.indexOf('@'))||'');
-          }
-
-          function ucfirst (str) {
-              // credits: http://kevin.vanzonneveld.net
-              str += '';
-              var f = str.charAt(0).toUpperCase();
-              return f + str.substr(1);
-          }
+            return d.promise;
         },
 
         getById : function(id){

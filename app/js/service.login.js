@@ -21,7 +21,6 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
                   password: pass,
                   rememberMe: true })
                .then(function(user) {
-                  //$rootScope.userId = auth.user.provider + ":" + auth.user.id;
                   }, function(err){
                     console.log('Login validation error:', err);
                 });
@@ -31,7 +30,7 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
               assertAuth();
                   auth.$login('facebook')
                     .then(function(user){
-                      console.log('fblogin service. AFTER auth.$login', auth);
+                      console.log('fblogin service. AFTER auth.$login user obj', user);
                       //$rootScope.userId = auth.user.provider + ":" + auth.user.id;
                       userDataService.exists(user); 
                       }, function(err){
@@ -58,16 +57,19 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
             //    }
             // },
 
-            createAccount: function(email, pass, callback) {
-              console.log('createAccount');
+            createAccount: function(obj, callback) {
+              //callback can be used to call login after account creation
+              console.log('createAccount', obj);
                assertAuth();
-               auth.$createUser(email, pass)  //returns a promise that is resolved when acnt successfully created
+               auth.$createUser(obj.email, obj.password)  
                 .then(function(user) { 
-                    console.log('$createUser arguments', arguments);
-                    userDataService.createByEmail(user);
+                    //set up obj for database storage
+                    delete obj.password
+                    obj.authDump = user;
+                    obj.firebaseAuth = user.firebaseAuthToken;
+                    userDataService.createByEmail(obj);
                     callback && callback(null, user) }, callback);
             }
-
          };
 
          function assertAuth() {
