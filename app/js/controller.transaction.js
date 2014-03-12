@@ -47,7 +47,7 @@ angular.module('myApp.controller.transactions', ['myApp.service.transactiondata'
 
       };
 
-      $scope.delete = function(){
+      $scope.delete = function(obj){
         //not finished in service
         
       };
