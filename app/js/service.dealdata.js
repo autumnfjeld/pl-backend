@@ -55,8 +55,6 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
       return d.promise;
     },
 
-
-    //When creating a deal, you need also to add a key in the merchant object
     create: function(deal) {
       var d = $q.defer();
 
@@ -65,24 +63,10 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase'])
       //Creating the deal in the Firebase deals object
       id.set(deal, function(err) {
         if(!err) {
-          //Saving the image in the deal object
-          var reader = new FileReader();
-          reader.onload = (function(theFile) {
-            return function(e) {
-              var filePayload = e.target.result;
-              var f = firebaseRef('deals/' + id.name() + '/image')
-              f.set(filePayload, function(err) {
-                if(!err) {
-                  //Adding a deal key in the merchant / deals object
-                  var name = id.name();
-                  root.child('/merchants/' + deal.merchantId + '/deals/' + name).set(true);
-                  d.resolve();
-                } 
-              });
-            };
-          })(deal.file);
-          reader.readAsDataURL(deal.file);
-
+          //Adding a deal key in the merchant / deals object
+          var name = id.name();
+          root.child('/merchants/' + deal.merchantId + '/deals/' + name).set(true);
+          d.resolve();
         } else {
           d.reject();
         }
