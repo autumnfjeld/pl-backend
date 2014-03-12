@@ -3,6 +3,7 @@
 
 <button ng-click="getCurrUserTransactions()">get Current User's Transactions</button>
 <button ng-click="getAll()">get all Transactions</button> 
+<button ng-click="update()">update with dummy trans id</button> 
 <br>
 
 <form ng-submit="createTransaction()">
@@ -19,9 +20,11 @@
   <fieldset>
       <h4> Current User's transactions</h4>
     <ul ng-repeat="(transactionId, transaction) in currUserTransactions">
-      {{ transactionId }}
-      <li>dealId: {{ transaction.dealId }} | starttime: {{transaction.startTimestamp.}}
+      Transaction id:  {{ transactionId }}
+      <li> deal Id: {{ transaction.dealId }} | starttime: {{transaction.startTimestamp}}
         <!-- <a href="#/deals/{{ dealId }}">description</a>  -->
+      <button ng-click="deleteTransaction(transactionId)">delete</button> 
+
       </li>
     </ul> 
   </fieldset>

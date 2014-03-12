@@ -121,13 +121,34 @@ angular.module('myApp.service.transactiondata', ['firebase', 'myApp.service.fire
           return d.promise;
         },
 
-        updateStatus : function(id, obj){
+        update : function(id, obj){
           var d = $q.defer();
           firebaseRef('transactions/' + id).set(obj, function(err) {
             err ? d.reject() : d.resolve();
           });
           return d.promise;
-        }
+        },
+
+        delete : function(id){
+
+          //NOT FINISHED
+          var d = $q.defer();
+          //first get merch & user id for subsequent delete
+
+          //Delete from transactions
+          firebaseRef('transactions/' + id).remove(function(err) {
+            if(!err) {
+              //Deleting from merchants
+              root.child('/merchants/' + merchantId + '/transactions/' + id).remove(function(err) {
+                err ? d.reject() : d.resolve();
+              });
+              //Delete from users
+            } else {
+              d.reject();
+            }
+          });
+          return d.promise;
+            }
 
       };   
 
