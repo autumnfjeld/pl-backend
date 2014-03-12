@@ -1,8 +1,8 @@
 (function() {
    'use strict';
 
-   angular.module('myApp.services.helpers', ['myApp.service.login', 'myApp.service.firebase'])
-      .factory('helpers', [ function() {
+   angular.module('myApp.services.helpers', ['myApp.service.login', 'myApp.service.firebase', 'waitForAuth'])
+      .factory('helpers', ['$rootScope', 'waitForAuth', function($rootScope, waitForAuth) {
         return {
           emailStrip :function(email) {
             var pos1 = email.indexOf('@');

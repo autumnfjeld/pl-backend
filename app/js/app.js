@@ -9,9 +9,8 @@ angular.module('myApp',
 
    .run(['loginService', '$rootScope', 'FBURL', 
       function(loginService, $rootScope, FBURL) {
-      // establish authentication
       // with facebook login this returns an auth object of facebook data
       $rootScope.auth = loginService.init('/login');
       $rootScope.FBURL = FBURL;
-      //$rootScope.userId = currentUserKey;
+      //$rootScope.userId = $rootScope.auth.user.provider + ":" + $rootScope.auth.user.id;
    }]);

@@ -5,7 +5,7 @@
     <fieldset>
         <legend>Profile</legend>
         <label>
-            <span>Userid: {{user }}</span>
+            <span>Userid: {{userId}}</span>
         </label>
         <label>
             <span>Name:</span>
@@ -18,7 +18,7 @@
         </label>
     </fieldset>
 
-    <fieldset>
+<!--     <fieldset>
         <legend>Change Password</legend>
 
         <label>
@@ -40,9 +40,23 @@
 
         <p class="error" ng-show="err">{{err}}</p>
         <p class="good" ng-show="msg">{{msg}}</p>
-    </fieldset>
+    </fieldset> -->
 </form>
 
 <button ng-click="logout()">Log Out</button>
 <button ng-click="getList()">Get list of users</button>
-<button ng-click="getOne()">Get one user</button>
+<button ng-click="getOne()">Get current user</button>
+<button ng-click="getAll()">Get all users (useful?)</button>
+
+<br>
+<h3>Current User's Transactions</h3>
+<ul ng-repeat="(dealId, transaction) in transactionsOfUser">
+  <li>{{ transaction.startTimestamp }} | {{transaction.dealId}}
+    <!-- <a href="#/deals/{{ dealId }}">description</a>  -->
+    <!-- <button ng-click="deleteDeal(dealId, deal.merchantId)">delete</button>  -->
+  </li>
+</ul>
+<hr>
+
+
+
