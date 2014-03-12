@@ -21,6 +21,7 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase', 'my
                   password: pass,
                   rememberMe: true })
                .then(function(user) {
+                  console.log('login user obj', user, $rootScope.auth)
                   }, function(err){
                     console.log('Login validation error:', err);
                 });

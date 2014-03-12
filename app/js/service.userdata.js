@@ -10,7 +10,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
           var self = this;
           var d = $q.defer();
 
-          firebaseRef('users/' + 'facebook:' + auth.id)
+          firebaseRef('users/' + auth.uid)
             .once('value', function(snap){
               d.resolve(snap.val());
           });
@@ -36,7 +36,7 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
           };
 
           var d = $q.defer();
-          firebaseRef('users').child('facebook:'+auth.id)
+          firebaseRef('users').child(auth.uid)
             .set(userObj, function(err){
               err ? d.reject() : d.resolve();
             });
@@ -72,9 +72,9 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
         // },
         
         createByEmail : function(obj){
-          console.log('createByEmail', obj);
+          console.log('createByEmail', obj.authDump.uid);
           var d = $q.defer();
-          firebaseRef('users').child('password:'+ obj.authDump.id)
+          firebaseRef('users').child(obj.authDump.uid)
             .set(obj, function(err){
               err ? d.reject() : d.resolve();
             });
@@ -109,12 +109,12 @@ angular.module('myApp.service.userdata', ['firebase', 'myApp.service.firebase', 
         },
 
 
-        update : function(id, userObj){
-          //DENORMALIZE
-          //update implies client already has 'full' user object, overwrites whatever,
-          //then sends user object back, but what about id?
-          //TODO: let user update phone and email
-          firebaseRef('users/'+ id).set(userObj);
+        update : function(id, obj){
+          var d = $q.defer();
+          firebaseRef('users/' + id).set(obj, function(err) {
+            err ? d.reject() : d.resolve();
+          });
+          return d.promise;fir
         },
 
         updateLoc : function(){

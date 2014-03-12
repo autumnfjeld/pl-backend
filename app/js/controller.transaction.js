@@ -4,13 +4,11 @@ angular.module('myApp.controller.transactions', ['myApp.service.transactiondata'
    .controller('TransactionCtrl', ['$scope', '$rootScope', 'transactionService',
     function($scope, $rootScope, transactionService) {
 
-      $scope.userId = $rootScope.auth.user.provider + ":" + $rootScope.auth.user.id;
+      $scope.userId = $rootScope.auth.user.uid;
 
       transactionService.getByUserId($scope.userId).then(function(data){
         $scope.currUserTransactions = data;
-        console.log('hmmm?', $scope.currUserTransactions);
       });
-
 
       $scope.transaction = {
         userId      : $scope.userId,
@@ -23,16 +21,35 @@ angular.module('myApp.controller.transactions', ['myApp.service.transactiondata'
 
       $scope.createTransaction = function(){
         $scope.transaction.startTimestamp = new Date().getTime();
-        $scope.transaction.user_behavior = {clicked : true};
+        $scope.transaction.userBehavior   = {clicked : true};
+        $scope.transaction.status         = 'clicked';
         transactionService.create($scope.transaction);
       };
 
-      $scope.claimTransaction = function(){
+      $scope.update = function(){
+        //when a deal is claimed status, payment is updated
+        var id = '-JHnFLQFH79uPVRgOxvI';
+        //get
+        transactionService.getByTransactionId(id)
+          .then(function(data){
+            $scope.getTrans = data[id];
+            console.log('fresh $scope.getTrans', $scope.getTrans);
+            console.log('userBehavior', $scope.getTrans.userBehavior);
+            //update obj props
+            $scope.getTrans.status      = 'claimed';    //could connect to button or toggle
+            $scope.getTrans.payment     = 'cash'  ;     //link to payment button
+            $scope.getTrans.userBehavior['claimed'] = true;
+            console.log('after  $scope.getTrans', $scope.getTrans);
+            //send back updated object
+            transactionService.update(id, $scope.getTrans);
+          });
+        
 
       };
 
-      $scope.cancelTransaction = function(){
-
+      $scope.delete = function(obj){
+        //not finished in service
+        
       };
 
       $scope.getCurrUserTransactions = function(){

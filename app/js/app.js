@@ -12,5 +12,4 @@ angular.module('myApp',
       // with facebook login this returns an auth object of facebook data
       $rootScope.auth = loginService.init('/login');
       $rootScope.FBURL = FBURL;
-      //$rootScope.userId = $rootScope.auth.user.provider + ":" + $rootScope.auth.user.id;
    }]);
