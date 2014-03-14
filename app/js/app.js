@@ -2,9 +2,10 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('myApp',
-      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers',
+      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers', 'myApp.service.geo',
       'waitForAuth', 'routeSecurity', 'myApp.controller.deal', 'myApp.service.dealdata',
-      'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers', 'myApp.controller.transactions'])
+      'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers',
+      'myApp.controller.transactions'])
 
 
    .run(['loginService', '$rootScope', 'FBURL', 
