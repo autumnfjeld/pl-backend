@@ -42,6 +42,12 @@ Merchant: {{ merchant }}
   <input type="text" ng-model="deal.title" /><br>
   Description:
   <input type="text" ng-model="deal.description" /><br>
+  Quantity:
+  <input type="text" ng-model="deal.quantity" /><br>
+  Original Price:
+  <input type="text" ng-model="deal.originalPrice" /><br>
+  Deal Price:
+  <input type="text" ng-model="deal.dealPrice" /><br>
   Status:
   <select ng-model="deal.status" ng-options="status.name for status in statuses">
   </select>

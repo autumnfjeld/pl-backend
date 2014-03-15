@@ -1,5 +1,5 @@
 angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase',
-  'myApp.service.geofire', 'myApp.service.transactiondata'])
+  'myApp.service.geofirebase', 'myApp.service.transactiondata'])
   .factory('dealDataService', ['$firebase', '$q', 'firebaseRef', 'geoFirebaseService', 'transactionService',
     function($firebase, $q, firebaseRef, geoFirebaseService, transactionService) {
 

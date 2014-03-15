@@ -1,4 +1,4 @@
-angular.module('myApp.service.geo', ['ngResource'])
+angular.module('myApp.service.geogoogle', ['ngResource'])
   .factory('geoGoogleService', ['$http', '$q',
     function($http, $q) {
 

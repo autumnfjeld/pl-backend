@@ -2,7 +2,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('myApp',
-      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers', 'myApp.service.geo',
+      ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers',
       'waitForAuth', 'routeSecurity', 'myApp.controller.deal', 'myApp.service.dealdata',
       'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers',
       'myApp.controller.transactions'])

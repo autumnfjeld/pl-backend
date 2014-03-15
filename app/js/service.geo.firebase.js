@@ -1,4 +1,4 @@
-angular.module('myApp.service.geofire', ['firebase', 'myApp.service.firebase'])
+angular.module('myApp.service.geofirebase', ['firebase', 'myApp.service.firebase'])
   .factory('geoFirebaseService', ['$firebase', '$q', 'firebaseRef',
     function($firebase, $q, firebaseRef) {
 

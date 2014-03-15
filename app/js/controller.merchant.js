@@ -86,7 +86,8 @@ angular.module('myApp.controller.merchant', [])
           title: '',
           description: '',
           location: $scope.merchant.location,
-          merchantId: $scope.merchantId
+          merchantId: $scope.merchantId,
+          merchantBusinessName: $scope.merchant.businessName
         };
 
         //LIST OF MERCHANT DEALS
@@ -130,7 +131,8 @@ angular.module('myApp.controller.merchant', [])
                 title: '',
                 description: '',
                 location: $scope.merchant.location,
-                merchantId: $scope.merchantId
+                merchantId: $scope.merchantId,
+                merchantBusinessName: $scope.merchant.businessName
               };
 
               //Refetch the data

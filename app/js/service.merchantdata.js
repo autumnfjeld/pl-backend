@@ -1,6 +1,6 @@
-angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebase', 'myApp.service.geo'])
-  .factory('merchantDataService', ['$firebase', '$q', 'firebaseRef', 'geoService',
-    function($firebase, $q, firebaseRef, geoService) {
+angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebase', 'myApp.service.geogoogle'])
+  .factory('merchantDataService', ['$firebase', '$q', 'firebaseRef', 'geoGoogleService',
+    function($firebase, $q, firebaseRef, geoGoogleService) {
 
   var merchantsRef = firebaseRef('merchants');
 
