@@ -4,7 +4,8 @@
 angular.module('myApp',
       ['myApp.config', 'myApp.routes','myApp.service.login', 'myApp.controllers',
       'waitForAuth', 'routeSecurity', 'myApp.controller.deal', 'myApp.service.dealdata',
-      'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers', 'myApp.controller.transactions'])
+      'myApp.controller.merchant', 'myApp.service.merchantdata', 'myApp.services.helpers',
+      'myApp.controller.transactions'])
 
 
    .run(['loginService', '$rootScope', 'FBURL', 

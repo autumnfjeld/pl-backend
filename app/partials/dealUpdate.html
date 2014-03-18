@@ -1,13 +1,26 @@
-<a href="#/deals">Back to deals</a>
-<br>
-
 <h3>{{ deal.title }}</h3>
 <form ng-submit="updateDeal(dealId, deal)">
+  <label>Merchant: {{deal.merchantBusinessName}}</label>
   <label>Title:</label>
   <input type="text" ng-model="deal.title" value="{{ deal.title }}" /><br>
   <label>Description:</label>
   <input type="text" ng-model="deal.description" value="{{ deal.description }}" /><br>
+  <label>Quantity:</label>
+  <input type="text" ng-model="deal.quantity" value="{{ deal.quantity }}" /><br>
+  <label>Original Price:</label>
+  <input type="text" ng-model="deal.originalPrice" value="{{ deal.originalPrice }}" /><br>
+  <label>Deal Price:</label>
+  <input type="text" ng-model="deal.dealPrice" value="{{ deal.dealPrice }}" /><br>
+  <label>Status: {{deal.status.name}}</label>
+  <label>Latitude: {{deal.location[0]}}</label>
+  <label>Longitude: {{deal.location[1]}}</label>
+<!--   <select ng-model="deal.status" ng-options="status.name for status in statuses">
+  </select>
+ -->
   <img src="{{ deal.image }}">
+  <br>
+  <button ng-show="deal.status.name === 'Inactive'" ng-click="activate(dealId, deal)">Activate</button>
+  <button ng-show="deal.status.name === 'Active'" ng-click="deactivate(dealId, deal)">Inactivate</button>
   <input type="submit" value="Save" />
 </form>
 

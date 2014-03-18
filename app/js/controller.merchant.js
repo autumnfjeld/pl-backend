@@ -76,13 +76,18 @@ angular.module('myApp.controller.merchant', [])
       merchantDataService.getById($routeParams.merchantId)
       .then(function(data) {
         console.log('Success get merchant by id');
-        $scope.merchant = data;
         $scope.merchantId = $routeParams.merchantId;
+        $scope.merchant = data[$routeParams.merchantId];
+
+        //Define the possible statuses
+        $scope.statuses = [{name: 'Inactive'}, {name: 'Active'}];
         //Reset the $scope.deal object
         $scope.deal = {
           title: '',
           description: '',
-          merchantId: $scope.merchantId
+          location: $scope.merchant.location,
+          merchantId: $scope.merchantId,
+          merchantBusinessName: $scope.merchant.businessName
         };
 
         //LIST OF MERCHANT DEALS
@@ -95,11 +100,10 @@ angular.module('myApp.controller.merchant', [])
         console.log('Error get merchant by id');
       });
 
-      $scope.updateMerchant = function() {
-        merchantDataService.update($scope.merchantId, $scope.merchant)
+      $scope.updateMerchant = function(merchantId, merchant) {
+        merchantDataService.update(merchantId, merchant)
         .then(function() {
           console.log('Success update merchant');
-          $location.path('/merchants');
         }), function() {
           console.log('Error update merchant');
         };
@@ -126,7 +130,9 @@ angular.module('myApp.controller.merchant', [])
               $scope.deal = {
                 title: '',
                 description: '',
-                merchantId: $scope.merchantId
+                location: $scope.merchant.location,
+                merchantId: $scope.merchantId,
+                merchantBusinessName: $scope.merchant.businessName
               };
 
               //Refetch the data
@@ -145,13 +151,13 @@ angular.module('myApp.controller.merchant', [])
 
       };
 
-      $scope.deleteMerchantDeal = function(dealId, merchantId) {
+      $scope.deleteMerchantDeal = function(dealId, deal) {
         console.log('deleteMerchantDeal:dealId:', dealId);
-        dealDataService.delete(dealId, merchantId)
+        dealDataService.delete(dealId, deal)
         .then(function() {
           console.log('Success delete merchant dealId:', dealId);
           //Refetch the data
-          dealDataService.getByMerchantId(merchantId)
+          dealDataService.getByMerchantId(deal.merchantId)
           .then(function(data) {
             $scope.deals = data;
           });

@@ -1,6 +1,6 @@
-angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebase'])
-  .factory('merchantDataService', ['$firebase', '$q', 'firebaseRef',
-    function($firebase, $q, firebaseRef) {
+angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebase', 'myApp.service.geogoogle'])
+  .factory('merchantDataService', ['$firebase', '$q', 'firebaseRef', 'geoGoogleService',
+    function($firebase, $q, firebaseRef, geoGoogleService) {
 
   var merchantsRef = firebaseRef('merchants');
 
@@ -31,20 +31,64 @@ angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebas
 
     create: function(merchant) {
       var d = $q.defer();
-      var id = merchantsRef.push();
-      id.set(merchant, function(err) {
-        err ? d.reject() : d.resolve();
+      //var address = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+      var address = merchant.address1 + '+' + merchant.address2 + '+,'
+        + merchant.city + ',+' + merchant.state + ',+' + merchant.zip;
+      address = address.replace(/\s/g, '+');
+      console.log('address', address);
+      //CALL GOOGLE API AND GET THE LOCATION
+      geoService.fetchData(address)
+      .then(function(data) {
+        merchant.location = [];
+        merchant.location.push(data.results[0].geometry.location.lat);
+        merchant.location.push(data.results[0].geometry.location.lng);
+
+        var id = merchantsRef.push();
+        id.set(merchant, function(err) {
+          err ? d.reject() : d.resolve();
+        });
+      }, function() {
+          console.log('Error getting lat/lng from Google API');
+          d.reject();
       });
+
       return d.promise;
     },
 
+    // update: function(merchantId, merchant) {
+    //   var d = $q.defer();
+    //   firebaseRef('merchants/' + merchantId).set(merchant, function(err) {
+    //     err ? d.reject() : d.resolve();
+    //   });
+    //   return d.promise;
+    // },
+
     update: function(merchantId, merchant) {
       var d = $q.defer();
-      firebaseRef('merchants/' + merchantId).set(merchant, function(err) {
-        err ? d.reject() : d.resolve();
+
+      var address = merchant.address1 + '+' + merchant.address2 + '+,'
+        + merchant.city + ',+' + merchant.state + ',+' + merchant.zip;
+      address = address.replace(/\s/g, '+');
+      console.log('address', address);
+      //CALL GOOGLE API AND GET THE LOCATION
+      geoService.fetchData(address)
+      .then(function(data) {
+        merchant.location = [];
+        merchant.location.push(data.results[0].geometry.location.lat);
+        merchant.location.push(data.results[0].geometry.location.lng);
+
+        firebaseRef('merchants/' + merchantId).set(merchant, function(err) {
+          err ? d.reject() : d.resolve();
+        });
+
+      }, function() {
+          console.log('Error getting lat/lng from Google API');
+          d.reject();
       });
+
       return d.promise;
     },
+
 
     delete: function(merchantId) {
       var d = $q.defer();

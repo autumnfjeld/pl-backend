@@ -2,7 +2,7 @@
 <br>
 
 <h3>{{ merchant.businessName }}</h3>
-<form ng-submit="updateMerchant()">
+<form ng-submit="updateMerchant(merchantId, merchant)">
   Business name:
   <input type="text" ng-model="merchant.businessName" value="{{ merchant.businessName }}" /><br>
   Address1:
@@ -17,6 +17,8 @@
   <input type="text" ng-model="merchant.state" value="{{ merchant.state }}" /><br>
   Zip:
   <input type="text" ng-model="merchant.zip" value="{{ merchant.zip }}" /><br>
+  Latitude: {{ merchant.location[0] }} <br>
+  Longitude: {{ merchant.location[1] }} <br>
 
   <input type="submit" value="Save" />
 </form>
@@ -30,7 +32,7 @@ Merchant: {{ merchant }}
 <h3>{{ merchant.businessName }} List of deals</h3>
 <ul ng-repeat="(dealId, deal) in deals">
   <li>{{ deal.title }} | <a href="#/deals/{{ dealId }}">description</a> 
-    <button ng-click="deleteMerchantDeal(dealId, deal.merchantId)">delete</button> 
+    <button ng-click="deleteMerchantDeal(dealId, deal)">delete</button> 
   </li>
 </ul>
 <hr>
@@ -40,6 +42,15 @@ Merchant: {{ merchant }}
   <input type="text" ng-model="deal.title" /><br>
   Description:
   <input type="text" ng-model="deal.description" /><br>
+  Quantity:
+  <input type="text" ng-model="deal.quantity" /><br>
+  Original Price:
+  <input type="text" ng-model="deal.originalPrice" /><br>
+  Deal Price:
+  <input type="text" ng-model="deal.dealPrice" /><br>
+  Status:
+  <select ng-model="deal.status" ng-options="status.name for status in statuses">
+  </select>
   <input type="file" id="file" name='file' onchange="angular.element(this).scope().fileNameChanged(this)"/>
 
   <br>
