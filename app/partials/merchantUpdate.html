@@ -31,7 +31,7 @@ Merchant: {{ merchant }}
 <hr>
 <h3>{{ merchant.businessName }} List of deals</h3>
 <ul ng-repeat="(dealId, deal) in deals">
-  <li>{{ deal.title }} | <a href="#/deals/{{ dealId }}">description</a> 
+  <li>{{ deal.title }} | <a href="#/deals/{{ dealId }}">description</a>
     <button ng-click="deleteMerchantDeal(dealId, deal)">delete</button> 
   </li>
 </ul>
