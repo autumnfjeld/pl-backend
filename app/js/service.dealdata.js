@@ -169,7 +169,14 @@ angular.module('myApp.service.dealdata', ['firebase', 'myApp.service.firebase',
         _.each(arrayOfDeals, function(deal) {
           var id = deal.id;
           delete deal.id;
-          objContainer[id] = deal;
+          console.log('deal.endDateTime', deal.endDateTime);
+          console.log('Date.now()', Date.now());
+          var endDateTime = new Date(deal.endDateTime);
+          console.log('converted endDateTime', endDateTime);
+          if(endDateTime > Date.now()) {
+            //Add walking, driving and transit duration in the deal
+            objContainer[id] = deal;
+          }
         });
         d.resolve(objContainer);
       });

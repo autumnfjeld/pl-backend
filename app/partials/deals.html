@@ -1,6 +1,9 @@
 <h3>List of deals</h3>
 <ul ng-repeat="(dealId, deal) in deals">
-  <li>Title: {{ deal.title }} | Description: {{ deal.description }}" 
+  <li>Title: {{ deal.title }} | Description: {{ deal.description }}"
+    | Walking : {{ deal.walkingDuration }}
+    | Driving : {{ deal.drivingDuration }}
+    | Transit : {{ deal.transitDuration }}
   </li>
 </ul>
 <hr>
