@@ -2,11 +2,11 @@ angular.module('myApp.service.geogoogle', ['ngResource'])
   .factory('geoGoogleService', ['$http', '$q',
     function($http, $q) {
 
-  var apiKey ='AIzaSyD6ta21eMx5Nxi4PDozFSKta3fkMZh06TM';
-  var url ="https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&sensor=true"; 
 
   var fetchData = function(address) {
     var d = $q.defer();
+    var apiKey ='AIzaSyD6ta21eMx5Nxi4PDozFSKta3fkMZh06TM';
+    var url ="https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&sensor=true"; 
 
 
     $http.get(url)
@@ -22,10 +22,6 @@ angular.module('myApp.service.geogoogle', ['ngResource'])
     });
     return d.promise;
   };
-
-  // var getDurations(userLocation, dealLocation) {
-
-  // }
 
   return {
     fetchData: fetchData

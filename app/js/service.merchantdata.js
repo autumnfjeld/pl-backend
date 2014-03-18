@@ -37,7 +37,7 @@ angular.module('myApp.service.merchantdata', ['firebase', 'myApp.service.firebas
       address = address.replace(/\s/g, '+');
       console.log('address', address);
       //CALL GOOGLE API AND GET THE LOCATION
-      geoService.fetchData(address)
+      geoGoogleService.fetchData(address)
       .then(function(data) {
         merchant.location = [];
         merchant.location.push(data.results[0].geometry.location.lat);
